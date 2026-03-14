@@ -1,0 +1,10 @@
+
+#cache y archivos compilados de python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+#posibles archivos inutiles del SO
+.DS_Store
+Thumbs.db
