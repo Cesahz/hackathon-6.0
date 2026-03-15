@@ -1,0 +1,38 @@
+[
+  {
+    "id": 0,
+    "texto": "Un tío te ofrece una changa en la obra. Buena plata, pero te va a destruir la espalda.",
+    "opcion_izq": {
+      "texto": "Aceptar (Trabajar duro)",
+      "efectos": {"salud": -20, "social": 0, "intelecto": -5, "laboral": 15, "dinero": 150000}
+    },
+    "opcion_der": {
+      "texto": "Rechazar (Cuidar tu salud)",
+      "efectos": {"salud": 5, "social": -5, "intelecto": 0, "laboral": -5, "dinero": 0}
+    }
+  },
+  {
+    "id": 1,
+    "texto": "Tus amigos insisten en salir de farra el viernes. Estás cansado y tenés que estudiar.",
+    "opcion_izq": {
+      "texto": "Ir a la farra (Gasto inútil)",
+      "efectos": {"salud": -15, "social": 20, "intelecto": -10, "laboral": 0, "dinero": -80000}
+    },
+    "opcion_der": {
+      "texto": "Quedarte a estudiar (Aislamiento)",
+      "efectos": {"salud": 10, "social": -15, "intelecto": 15, "laboral": 0, "dinero": 0}
+    }
+  },
+  {
+    "id": 2,
+    "texto": "Se te descompuso la computadora. Necesitas una para seguir estudiando programación.",
+    "opcion_izq": {
+      "texto": "Comprar a cuotas (Deuda)",
+      "efectos": {"salud": -10, "social": 0, "intelecto": 10, "laboral": 5, "dinero": -250000}
+    },
+    "opcion_der": {
+      "texto": "Usar papel y lápiz (Ineficiencia)",
+      "efectos": {"salud": -5, "social": 0, "intelecto": -10, "laboral": -5, "dinero": 0}
+    }
+  }
+]
