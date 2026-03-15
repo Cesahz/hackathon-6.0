@@ -51,6 +51,10 @@ Se devuelve nuevo estado al frontend
 
 2. Instalar dependencias
 
+```
+    pip install -r requirements.txt
+```
+
 3. Ejecutar el servidor
 
 ```
@@ -69,6 +73,6 @@ Se devuelve nuevo estado al frontend
 
 Nadie hace push directo a `main`.
 
-Todo el desarrollo se realiza en ramas separadas
+Todo el desarrollo se realiza en ramas separadas:
 
 Las integraciones se realizan únicamente mediante **Pull Requests**.
