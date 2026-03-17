@@ -37,3 +37,32 @@ const ControladorVisual = {
         document.getElementById('val-social').textContent = stats.social + '%';
         document.getElementById('ui-dinero').textContent = this.fmt(stats.dinero);
     },
+    /* inyecta y anima los numeros de impacto (verdes/rojos) post-decision */
+    mostrarDeltas: function(efectos) {
+        if (!efectos) return;
+        ['salud', 'intelecto', 'laboral', 'social'].forEach(k => {
+            const v = efectos[k] || 0;
+            const b = document.getElementById('d-' + k);
+            if (!b) return;
+            b.classList.remove('show', 'up', 'down');
+            if (v === 0) return;
+            b.textContent = (v > 0 ? '+' : '') + v + '%';
+            b.classList.add(v > 0 ? 'up' : 'down');
+            requestAnimationFrame(() => requestAnimationFrame(() => b.classList.add('show')));
+        });
+        const db = document.getElementById('d-dinero');
+        if (db && efectos.dinero && efectos.dinero !== 0) {
+            db.classList.remove('show', 'up', 'down');
+            db.textContent = (efectos.dinero > 0 ? '+' : '-') + this.fmt(efectos.dinero);
+            db.classList.add(efectos.dinero > 0 ? 'up' : 'down');
+            requestAnimationFrame(() => requestAnimationFrame(() => db.classList.add('show')));
+        }
+    },
+
+    /* resetea los numeros de impacto */
+    ocultarDeltas: function() {
+        ['salud', 'intelecto', 'laboral', 'social', 'dinero'].forEach(k => {
+            const b = document.getElementById('d-' + k);
+            if (b) b.classList.remove('show', 'up', 'down');
+        });
+    },
