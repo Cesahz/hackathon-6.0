@@ -66,3 +66,26 @@ const ControladorVisual = {
             if (b) b.classList.remove('show', 'up', 'down');
         });
     },
+    /* despliega la capa oscura de fin de juego con resolucion narrativa */
+    ejecutarGameOver: function(statFatal, mensajeServidor) {
+        this.ocultarDeltas();
+        
+        // asignacion dinamica de textos dependiendo si es muerte o victoria
+        const title = statFatal ? this.mensajesDerrota[statFatal].title : 'Fin del Trayecto';
+        const msg = statFatal ? this.mensajesDerrota[statFatal].msg : mensajeServidor;
+        const icon = statFatal ? this.mensajesDerrota[statFatal].icon : '⏳';
+
+        document.getElementById('go-icon').textContent = icon;
+        document.getElementById('go-title').textContent = title;
+        document.getElementById('go-msg').textContent = msg;
+        
+        if (statFatal) {
+            const labels = { salud: 'Salud · 0%', intelecto: 'Intelecto · 0%', laboral: 'Laboral · 0%', social: 'Social · 0%', dinero: 'Dinero · ₲ 0' };
+            document.getElementById('go-stat-label').textContent = labels[statFatal];
+            document.getElementById('row-' + statFatal).classList.add('bar-critical');
+        } else {
+            document.getElementById('go-stat-label').textContent = "Equilibrio Temporal";
+        }
+        
+        setTimeout(() => document.getElementById('gameover-overlay').classList.add('active'), 500);
+    },
