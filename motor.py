@@ -28,19 +28,20 @@ def cargar_cartas():
 def inicializar_clase(clase):
     pass
 
-def obtener_estado_actual(): # analizar en la plantilla_de_trabajo como funciona e implementar
-    #.get(clave, valor_por_defecto): busca la clave en el dicc, si no existe devuelve el valor_por_defecto en vez de explotar
-    #"carta_actual_id" (ejemplo: "inicio", "trabajo_01")
+def obtener_estado_actual():
+    # extraer id con fallback seguro ante memoria vacia
     indice = estado_jugador.get("carta_actual_id", "")
-    # verificar si "carta_actual_id" existe en CARTAS
+    
+    # validar existencia del nodo.
     if indice in CARTAS:
-        # se guarda la carta correspondiente al estado actual, si quedan cartas
-        carta_actual = CARTAS[indice]
-        # devolver estado del jugador, carta actual y bandera de juego "fin" = False, el juego continua
-        return ({"stats": estado_jugador, "carta": carta_actual, "fin": False})
+        # clonar nodo para evitar mutacion de la base de datos global
+        carta_actual = CARTAS[indice].copy()
+        carta_actual["id"] = indice
+        
+        return {"stats": estado_jugador, "carta": carta_actual, "fin": False}
     else:
-        # en caso contrario no quedan cartas, devolver estado del jugador, carta actual y bandera de juego "fin" = True, el juego termina
-        return ({"stats": estado_jugador, "carta": None, "fin": True, "mensaje": "Sobreviviste al MVP."})
+        # resolucion segura por fin de grafo o estado vacio
+        return {"stats": estado_jugador, "carta": None, "fin": True, "mensaje": "Sobreviviste al MVP."}
     
 def procesar_turno(eleccion):
     pass
