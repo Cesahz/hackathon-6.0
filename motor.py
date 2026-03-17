@@ -37,8 +37,22 @@ def cargar_cartas():
     #para devolver la lista de las cartas que se cargaron desde el archivo cartas.json
     return CARTAS
 
-def inicializar_clase(clase):
-    pass
+def inicializar_clase(clase_nombre="Pobre pero Honrado"):
+    """
+    inyecta las estadisticas base segun la clase elegida y resetea el grafo.
+    """
+    global estado_jugador
+    # si la clase no existe, usa una por defecto por seguridad
+    clase = CLASES_DISPONIBLES.get(clase_nombre, CLASES_DISPONIBLES["Pobre pero Honrado"])
+    
+    estado_jugador = {
+        "salud": clase["stats"]["salud"],
+        "social": clase["stats"]["social"],
+        "intelecto": clase["stats"]["intelecto"],
+        "laboral": clase["stats"]["laboral"],
+        "dinero": clase["stats"]["dinero"],
+        "carta_actual_id": "inicio"
+    }
 
 def obtener_estado_actual(): # analizar en la plantilla_de_trabajo como funciona e implementar
     pass
