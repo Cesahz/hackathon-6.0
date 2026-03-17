@@ -15,6 +15,20 @@ const ControladorVisual = {
     /* formateador de moneda local */
     fmt: function(n) { return '₲ ' + Math.abs(n).toLocaleString('es-PY'); },
 
+    /* solicita el estado inicial a python e inyecta la primera interfaz */
+    inicializar: function() {
+        fetch('/api/estado')
+            .then(res => res.json())
+            .then(datos => {
+                this.renderizarStats(datos.stats);
+                if (!datos.fin) {
+                    this.cartaActual = datos.carta;
+                    this.renderizarCarta(this.cartaActual);
+                }
+                this.asignarEventos();
+            });
+    },
+
     /* actualiza el dom con los textos de la carta actual */
     renderizarCarta: function(carta) {
         document.getElementById('npc-name').textContent = 'Carta';
@@ -37,6 +51,7 @@ const ControladorVisual = {
         document.getElementById('val-social').textContent = stats.social + '%';
         document.getElementById('ui-dinero').textContent = this.fmt(stats.dinero);
     },
+
     /* inyecta y anima los numeros de impacto (verdes/rojos) post-decision */
     mostrarDeltas: function(efectos) {
         if (!efectos) return;
@@ -66,6 +81,7 @@ const ControladorVisual = {
             if (b) b.classList.remove('show', 'up', 'down');
         });
     },
+
     /* despliega la capa oscura de fin de juego con resolucion narrativa */
     ejecutarGameOver: function(statFatal, mensajeServidor) {
         this.ocultarDeltas();
@@ -88,19 +104,6 @@ const ControladorVisual = {
         }
         
         setTimeout(() => document.getElementById('gameover-overlay').classList.add('active'), 500);
-    },
-    /* solicita el estado inicial a python e inyecta la primera interfaz */
-    inicializar: function() {
-        fetch('/api/estado')
-            .then(res => res.json())
-            .then(datos => {
-                this.renderizarStats(datos.stats);
-                if (!datos.fin) {
-                    this.cartaActual = datos.carta;
-                    this.renderizarCarta(this.cartaActual);
-                }
-                this.asignarEventos();
-            });
     },
 
     /* procesa el gesto del usuario, anima la carta y delega el calculo a python */
