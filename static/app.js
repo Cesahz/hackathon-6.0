@@ -89,3 +89,109 @@ const ControladorVisual = {
         
         setTimeout(() => document.getElementById('gameover-overlay').classList.add('active'), 500);
     },
+    /* solicita el estado inicial a python e inyecta la primera interfaz */
+    inicializar: function() {
+        fetch('/api/estado')
+            .then(res => res.json())
+            .then(datos => {
+                this.renderizarStats(datos.stats);
+                if (!datos.fin) {
+                    this.cartaActual = datos.carta;
+                    this.renderizarCarta(this.cartaActual);
+                }
+                this.asignarEventos();
+            });
+    },
+
+    /* procesa el gesto del usuario, anima la carta y delega el calculo a python */
+    ejecutarSwipe: function(dir) {
+        if (this.busy || !this.cartaActual) return;
+        this.busy = true;
+        
+        const ci = document.getElementById('card-inner');
+        const opcion = dir === 'izq' ? this.cartaActual.opcion_izq : this.cartaActual.opcion_der;
+
+        document.getElementById('log').textContent = '› ' + opcion.texto;
+        ci.classList.add(dir === 'izq' ? 'fly-l' : 'fly-r');
+
+        // delegacion de matematicas a servidor (motor de grafos)
+        fetch('/api/decision', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ eleccion: dir })
+        })
+        .then(res => res.json())
+        .then(resultadoBackend => {
+            setTimeout(() => {
+                this.renderizarStats(resultadoBackend.stats);
+                this.mostrarDeltas(resultadoBackend.efectos); 
+
+                // animacion de pulso para barras alteradas
+                ['salud', 'intelecto', 'laboral', 'social'].forEach(k => {
+                    if (!resultadoBackend.efectos || !resultadoBackend.efectos[k]) return;
+                    const r = document.getElementById('row-' + k);
+                    r.classList.remove('bar-changing');
+                    void r.offsetWidth;
+                    r.classList.add('bar-changing');
+                    setTimeout(() => r.classList.remove('bar-changing'), 600);
+                });
+
+                // intercepcion de colapso dictado por servidor
+                if (resultadoBackend.fin) {
+                    setTimeout(() => { this.ejecutarGameOver(resultadoBackend.stat_fatal, resultadoBackend.mensaje); this.busy = false; }, 700);
+                    return;
+                }
+
+                // carga e inyeccion del siguiente nodo del grafo
+                setTimeout(() => {
+                    this.ocultarDeltas();
+                    this.cartaActual = resultadoBackend.carta;
+                    this.renderizarCarta(this.cartaActual);
+                    ci.classList.remove('fly-l', 'fly-r', 'tilt-l', 'tilt-r');
+                    void ci.offsetWidth;
+                    ci.classList.add('entering');
+                    setTimeout(() => { ci.classList.remove('entering'); this.busy = false; }, 350);
+                }, 600);
+
+            }, 880);
+        });
+    },
+
+    /* asignacion de escuchadores de eventos para interaccion manual o tactil */
+    asignarEventos: function() {
+        let drag = false, sx = 0, cx = 0;
+        const ci = document.getElementById('card-inner');
+
+        const ds = (x) => { if (!this.busy) { drag = true; sx = x; } };
+        const dm = (x) => {
+            if (!drag) return;
+            cx = x - sx;
+            ci.classList.remove('tilt-l', 'tilt-r');
+            if (cx < -30) ci.classList.add('tilt-l');
+            else if (cx > 30) ci.classList.add('tilt-r');
+        };
+        const de = () => {
+            if (!drag) return;
+            drag = false;
+            if (cx < -60) this.ejecutarSwipe('izq');
+            else if (cx > 60) this.ejecutarSwipe('der');
+            else ci.classList.remove('tilt-l', 'tilt-r');
+            cx = 0;
+        };
+
+        ci.addEventListener('mousedown', e => ds(e.clientX));
+        window.addEventListener('mousemove', e => dm(e.clientX));
+        window.addEventListener('mouseup', de);
+        ci.addEventListener('touchstart', e => ds(e.touches[0].clientX), { passive: true });
+        window.addEventListener('touchmove', e => dm(e.touches[0].clientX), { passive: true });
+        window.addEventListener('touchend', de);
+
+        document.getElementById('btn-izq').addEventListener('click', () => this.ejecutarSwipe('izq'));
+        document.getElementById('btn-der').addEventListener('click', () => this.ejecutarSwipe('der'));
+        
+        // reinicio forzando recarga de la aplicacion al cliente
+        document.getElementById('go-restart').addEventListener('click', () => {
+            location.reload(); 
+        });
+    }
+};
