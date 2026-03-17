@@ -195,3 +195,44 @@ const ControladorVisual = {
         });
     }
 };
+
+/* arranque autonomo del menu al cargar documento */
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. solicitar diccionario de clases a servidor
+    fetch('/api/clases')
+        .then(res => res.json())
+        .then(clases => {
+            const container = document.getElementById('clases-container');
+            container.innerHTML = ''; 
+            
+            // 2. renderizado dinamico (data-driven) de botones de seleccion
+            for (const [nombre, datos] of Object.entries(clases)) {
+                const btn = document.createElement('button');
+                btn.className = 'btn-clase';
+                btn.onclick = () => elegirClase(nombre);
+                
+                btn.innerHTML = `
+                    <span style="font-weight: bold; font-size: 22px; color: #c8cad4;">${nombre}</span>
+                    <span class="clase-desc">${datos.descripcion}</span>
+                `;
+                container.appendChild(btn);
+            }
+        });
+});
+
+/* puente comunicacional de inicializacion con servidor */
+function elegirClase(nombreClase) {
+    fetch('/api/iniciar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ clase: nombreClase })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.status === 'ok') {
+            // eliminacion de capa de seleccion y activacion de hud
+            document.getElementById('start-screen').style.display = 'none';
+            ControladorVisual.inicializar();
+        }
+    });
+}
