@@ -104,3 +104,7 @@ def procesar_turno(eleccion):
         return {"stats": estado_jugador, "carta": nueva_carta, "fin": False, "efectos": efectos}
     else:
         return {"stats": estado_jugador, "fin": True, "mensaje": "Lograste sobrevivir esta etapa.", "efectos": efectos}
+    
+def obtener_clases():
+    """Devuelve el diccionario completo de clases para el frontend."""
+    return CLASES_DISPONIBLES
