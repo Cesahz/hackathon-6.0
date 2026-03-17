@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pathraguay</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+<div id="game">
+
+  <div id="start-screen" class="start-screen">
+    <h2 class="start-title">Elige tu Origen</h2>
+    <div id="clases-container" class="clases-container"></div>
+  </div>
+
+  <div id="gameover-overlay">
+    <div id="gameover-box">
+      <div id="go-icon">💀</div>
+      <div id="go-title">Fin del juego</div>
+      <div id="go-rule"></div>
+      <div id="go-msg"></div>
+      <div id="go-stat-label"></div>
+      <button id="go-restart">↺ Intentar de nuevo</button>
+    </div>
+  </div>
+
+  <div id="stats-block">
+    <div class="stat-row s-salud" id="row-salud">
+      <div class="stat-icon">🫀</div>
+      <div class="stat-name">Salud</div>
+      <div class="stat-bar-bg">
+        <div class="stat-bar-fill" id="ui-salud"></div>
+      </div>
+      <div class="stat-val" id="val-salud">72%</div>
+      <div class="delta-badge" id="d-salud"></div>
+    </div>
+
+    <div class="stat-row s-intelecto" id="row-intelecto">
+      <div class="stat-icon">📚</div>
+      <div class="stat-name">Intelecto</div>
+      <div class="stat-bar-bg">
+        <div class="stat-bar-fill" id="ui-intelecto"></div>
+      </div>
+      <div class="stat-val" id="val-intelecto">58%</div>
+      <div class="delta-badge" id="d-intelecto"></div>
+    </div>
+
+    <div class="stat-row s-laboral" id="row-laboral">
+      <div class="stat-icon">💼</div>
+      <div class="stat-name">Laboral</div>
+      <div class="stat-bar-bg">
+        <div class="stat-bar-fill" id="ui-laboral"></div>
+      </div>
+      <div class="stat-val" id="val-laboral">46%</div>
+      <div class="delta-badge" id="d-laboral"></div>
+    </div>
+
+    <div class="stat-row s-social" id="row-social">
+      <div class="stat-icon">🗣</div>
+      <div class="stat-name">Social</div>
+      <div class="stat-bar-bg">
+        <div class="stat-bar-fill" id="ui-social"></div>
+      </div>
+      <div class="stat-val" id="val-social">61%</div>
+      <div class="delta-badge" id="d-social"></div>
+    </div>
+
+    <div class="stat-row s-dinero" id="row-dinero">
+      <div class="stat-icon">💸</div>
+      <div class="stat-name">Dinero</div>
+      <div class="stat-bar-bg"></div>
+      <div class="stat-val" id="ui-dinero">₲ 1.250.000</div>
+      <div class="delta-badge" id="d-dinero"></div>
+    </div>
+  </div>
+
+  <div id="card-area">
+    <div id="card-inner">
+      <div class="hud-sep"></div>
+      <div id="name-block">
+        <div id="npc-tag">La vida puede tener giros inesperados...</div>
+        <div id="npc-name"></div>
+      </div>
+      <div class="hud-sep"></div>
+
+      <div id="card-image">
+        <svg viewBox="0 0 300 170" xmlns="http://www.w3.org/2000/svg">
+          <rect width="300" height="170" fill="#080b12"/>
+          <rect x="0"   y="110" width="20" height="60" fill="#0f1118"/>
+          <rect x="18"  y="95"  width="24" height="75" fill="#111420"/>
+          <rect x="40"  y="105" width="16" height="65" fill="#0f1118"/>
+          <rect x="54"  y="82"  width="32" height="88" fill="#111420"/>
+          <rect x="84"  y="98"  width="18" height="72" fill="#0f1118"/>
+          <rect x="100" y="76"  width="22" height="94" fill="#111420"/>
+          <rect x="120" y="90"  width="28" height="80" fill="#0f1118"/>
+          <rect x="146" y="80"  width="20" height="90" fill="#111420"/>
+          <rect x="164" y="100" width="30" height="70" fill="#0f1118"/>
+          <rect x="192" y="85"  width="22" height="85" fill="#111420"/>
+          <rect x="236" y="78"  width="30" height="92" fill="#111420"/>
+          <rect x="264" y="102" width="36" height="68" fill="#0f1118"/>
+          <rect x="24"  y="102" width="5" height="4" fill="#9b4dca" opacity="0.6"/>
+          <rect x="60"  y="90"  width="5" height="4" fill="#d4a017" opacity="0.5"/>
+          <rect x="104" y="84"  width="5" height="4" fill="#3d8fe0" opacity="0.6"/>
+          <rect x="150" y="88"  width="5" height="4" fill="#9b4dca" opacity="0.5"/>
+          <rect x="196" y="92"  width="5" height="4" fill="#d4a017" opacity="0.6"/>
+          <circle cx="40"  cy="18" r="0.8" fill="#ffffff" opacity="0.5"/>
+          <circle cx="100" cy="10" r="0.6" fill="#ffffff" opacity="0.4"/>
+          <circle cx="180" cy="22" r="0.8" fill="#ffffff" opacity="0.5"/>
+          <circle cx="260" cy="32" r="16" fill="#1a1d2e" stroke="#2a2d3a" stroke-width="0.5"/>
+          <circle cx="266" cy="27" r="12" fill="#080b12"/>
+          <rect x="100" y="52" width="100" height="68" rx="6" fill="#12151e" stroke="#22263a" stroke-width="0.5"/>
+          <ellipse cx="150" cy="46" rx="16" ry="17" fill="#1e1a2c"/>
+          <rect x="126" y="60" width="48" height="32" rx="4" fill="#1a1828"/>
+          <polygon points="150,60 154,68 150,82 146,68" fill="#9b4dca" opacity="0.4"/>
+          <rect x="100" y="102" width="100" height="8" rx="2" fill="#1e2230"/>
+          <rect x="126" y="68" width="48" height="32" rx="3" fill="#0d1524" stroke="#3d8fe033" stroke-width="0.5"/>
+          <rect x="132" y="75" width="28" height="2" rx="1" fill="#3d8fe0" opacity="0.2"/>
+          <rect x="132" y="81" width="20" height="2" rx="1" fill="#3d8fe0" opacity="0.15"/>
+          <rect x="132" y="87" width="24" height="2" rx="1" fill="#3d8fe0" opacity="0.18"/>
+          <rect x="132" y="93" width="16" height="2" rx="1" fill="#d4a017" opacity="0.2"/>
+        </svg>
+      </div>
+
+      <div id="situation-block">
+        <div id="situation-text"></div>
+      </div>
+
+      <div id="btn-row">
+        <button id="btn-izq"></button>
+        <button id="btn-der"></button>
+      </div>
+    </div>
+  </div>
+
+  <div id="log"></div>
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
