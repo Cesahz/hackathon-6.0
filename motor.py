@@ -23,7 +23,19 @@ CARTAS = {}
 
 
 def cargar_cartas():
-    pass
+    
+    #para modificar la variable global
+    global CARTAS
+    
+    #para crear la ruta (dirección) completa del archivo cartas.json
+    ruta= os.path.join(os.path.dirname(__file__), "data", "cartas.json")
+    
+    #para abrir el archivo cartas.json para leerlo y guardarlo en la variable f
+    with open(ruta, 'r', encoding='utf-8') as f:
+        CARTAS = json.load(f)
+
+    #para devolver la lista de las cartas que se cargaron desde el archivo cartas.json
+    return CARTAS
 
 def inicializar_clase(clase):
     pass
