@@ -114,6 +114,7 @@ body {
     line-height: 1.4;
     font-family: 'Share Tech Mono', monospace;
 }
+
 /* bloque principal de estadisticas del jugador */
 #stats-block {
   position: relative;
@@ -298,6 +299,7 @@ body {
   border-left: 1px solid #22263a;
   border-right: 1px solid #22263a;
 }
+
 /* area contenedora del nodo interactivo (carta) */
 #card-area {
   position: relative;
@@ -445,6 +447,7 @@ body {
   position: relative;
   z-index: 2;
 }
+
 /* capa de oscurecimiento absoluto para derrota */
 #gameover-overlay {
   position: absolute;
