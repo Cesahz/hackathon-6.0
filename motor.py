@@ -90,8 +90,12 @@ def procesar_turno(eleccion):
     # verificar derrota  ANTES de avanzar
     if estado_jugador["salud"] <= 0:
         return {"stats": estado_jugador, "fin": True, "mensaje": "GAME OVER: colapso por burnout clínico.", "stat_fatal": "salud", "efectos": efectos}
-    if estado_jugador["dinero"] < 0:
+    if estado_jugador["dinero"] <= 0:
         return {"stats": estado_jugador, "fin": True, "mensaje": "GAME OVER: bancarrota. el sistema te devoró.", "stat_fatal": "dinero", "efectos": efectos}
+    if estado_jugador["social"] <= 0:
+        return {"stats": estado_jugador, "fin": True, "mensaje": "GAME OVER: le dio la depre.", "stat_fatal": "social", "efectos": efectos}
+    if estado_jugador["intelecto"] <= 0:
+        return {"stats": estado_jugador, "fin": True, "mensaje": "GAME OVER: .", "stat_fatal": "intelecto", "efectos": efectos}
 
     # avanzar a la siguiente carta usando el grafo
     siguiente_id = carta[nombre_opcion].get("siguiente_id")
