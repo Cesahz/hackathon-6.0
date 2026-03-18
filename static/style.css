@@ -114,3 +114,187 @@ body {
     line-height: 1.4;
     font-family: 'Share Tech Mono', monospace;
 }
+/* bloque principal de estadisticas del jugador */
+#stats-block {
+  position: relative;
+  z-index: 3;
+  width: 500px;
+  background: #12151f;
+  border: 1px solid #22263a;
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
+  padding: 18px 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+/* fila individual de estadistica */
+.stat-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  transition: opacity 0.25s;
+}
+
+/* icono emoji de la estadistica */
+.stat-icon {
+  font-size: 18px;
+  width: 24px;
+  text-align: center;
+  flex-shrink: 0;
+  transition: transform 0.25s, filter 0.25s;
+}
+
+/* nombre en texto de la estadistica */
+.stat-name {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  width: 90px;
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+
+/* fondo oscuro de la barra de progreso */
+.stat-bar-bg {
+  flex: 1;
+  height: 5px;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+/* relleno de color de la barra de progreso */
+.stat-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.6s cubic-bezier(.4, 0, .2, 1);
+}
+
+/* valor numerico porcentual de la estadistica */
+.stat-val {
+  font-size: 12px;
+  width: 40px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* definicion de color para salud */
+.s-salud .stat-name, .s-salud .stat-val { color: #9b4dca; }
+.s-salud .stat-bar-bg { background: #2d1a38; }
+.s-salud .stat-bar-fill { background: #9b4dca; }
+
+/* definicion de color para intelecto */
+.s-intelecto .stat-name, .s-intelecto .stat-val { color: #3d8fe0; }
+.s-intelecto .stat-bar-bg { background: #161e2e; }
+.s-intelecto .stat-bar-fill { background: #3d8fe0; }
+
+/* definicion de color para laboral */
+.s-laboral .stat-name, .s-laboral .stat-val { color: #d4a017; }
+.s-laboral .stat-bar-bg { background: #2a2214; }
+.s-laboral .stat-bar-fill { background: #d4a017; }
+
+/* definicion de color para social */
+.s-social .stat-name, .s-social .stat-val { color: #e05599; }
+.s-social .stat-bar-bg { background: #2d1020; }
+.s-social .stat-bar-fill { background: #e05599; }
+
+/* definicion de color y formato para dinero */
+.s-dinero .stat-name { color: #2dbd6e; }
+.s-dinero .stat-bar-bg { display: none; }
+.s-dinero .stat-val {
+  color: #2dbd6e;
+  font-size: 15px;
+  width: auto;
+  flex: 1;
+  text-align: right;
+  font-weight: 700;
+}
+
+/* opacidad de estadisticas no afectadas durante hover */
+.stat-row.dimmed { opacity: 0.28; }
+
+/* brillo de icono en estadisticas afectadas durante hover */
+.stat-row.affected .stat-icon {
+  filter: drop-shadow(0 0 5px currentColor);
+  transform: scale(1.18);
+}
+
+/* colores intensificados durante hover */
+.stat-row.affected.s-salud .stat-bar-bg { background: #4a2060; }
+.stat-row.affected.s-salud .stat-bar-fill { background: #c070f0; }
+
+.stat-row.affected.s-intelecto .stat-bar-bg { background: #1e3050; }
+.stat-row.affected.s-intelecto .stat-bar-fill { background: #5aacff; }
+
+.stat-row.affected.s-laboral .stat-bar-bg { background: #3a2e10; }
+.stat-row.affected.s-laboral .stat-bar-fill { background: #f0c040; }
+.stat-row.affected.s-laboral .stat-name,
+.stat-row.affected.s-laboral .stat-val { color: #f0c040 !important; }
+
+.stat-row.affected.s-social .stat-bar-bg { background: #3d1030; }
+.stat-row.affected.s-social .stat-bar-fill { background: #f070b8; }
+
+.stat-row.affected.s-dinero .stat-val { color: #5de0a0; }
+
+/* numeros flotantes de impacto despues de decidir */
+.delta-badge {
+  position: absolute;
+  right: -45px;
+  top: 50%;
+  transform: translateY(-50%) translateX(-4px);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* visibilidad de numeros flotantes */
+.delta-badge.show {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* colores de numeros flotantes positivo y negativo */
+.delta-badge.up { color: #2dbd6e; }
+.delta-badge.down { color: #e05555; }
+
+/* posicionamiento especial del numero flotante de dinero */
+#d-dinero {
+  right: -85px;
+  font-size: 12px;
+}
+
+/* motor de animacion de pulso para barras alteradas */
+@keyframes bar-pulse {
+  0% { opacity: 1; }
+  35% { opacity: 0.3; }
+  100% { opacity: 1; }
+}
+
+/* aplicacion de animacion de pulso */
+.bar-changing .stat-bar-fill {
+  animation: bar-pulse 0.55s ease;
+}
+
+/* motor de animacion parpadeante para game over */
+@keyframes blink-bar {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
+/* aplicacion de animacion parpadeante a barra critica */
+.bar-critical .stat-bar-fill {
+  animation: blink-bar 1s ease-in-out infinite;
+}
+
+/* linea divisoria entre secciones del hud */
+.hud-sep {
+  height: 1px;
+  background: #22263a;
+  border-left: 1px solid #22263a;
+  border-right: 1px solid #22263a;
+}
