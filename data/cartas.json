@@ -1,43 +1,54 @@
 {
-  "inicio": {
-    "texto": "texto que describe la situacion o las opciones",
-    "opcion_izq": {
-      "texto": "matricularse en la uni",
-      "efectos": {"intelecto": 15, "dinero": -200000, "laboral": 1},
-      "siguiente_id": "uni_01_ingreso"
+    "inicio": {
+        "texto": "[TEST] Carta 1 de 2. Swipe izquierda dos veces para morir.",
+        "img": "/static/img/biggie.png",
+        "opcion_izq": {
+            "texto": "Izquierda (-60 salud)",
+            "siguiente_id": "carta_muerte",
+            "efectos": {
+                "salud": -41,
+                "dinero": 0,
+                "intelecto": 0,
+                "laboral": 0,
+                "social": 0
+            }
+        },
+        "opcion_der": {
+            "texto": "Derecha (sin efecto)",
+            "siguiente_id": "carta_muerte",
+            "efectos": {
+                "salud": 0,
+                "dinero": 0,
+                "intelecto": 0,
+                "laboral": 0,
+                "social": 0
+            }
+        }
     },
-    "opcion_der": {
-      "texto": "trabajar",
-      "efectos": {"intelecto": 0, "dinero": 250000, "laboral": 15},
-      "siguiente_id": "trabajo_01_novato"
+    "carta_muerte": {
+        "texto": "[TEST] Carta 2 de 2. Swipe izquierda para morir ahora.",
+        "img": "",
+        "opcion_izq": {
+            "texto": "Izquierda (-60 salud) -> MUERTE GARANTIZADA",
+            "siguiente_id": "fin",
+            "efectos": {
+                "salud": -60,
+                "dinero": 0,
+                "intelecto": 0,
+                "laboral": 0,
+                "social": 0
+            }
+        },
+        "opcion_der": {
+            "texto": "Derecha (sin efecto)",
+            "siguiente_id": "fin",
+            "efectos": {
+                "salud": 0,
+                "dinero": 0,
+                "intelecto": 0,
+                "laboral": 0,
+                "social": 0
+            }
+        }
     }
-  },
-
-  "uni_01_ingreso": {
-    "texto": "en el camino te encontras con Maria (tiene sorpresita y voz masculina)",
-    "opcion_izq": {
-      "texto": "salir con Maria",
-      "efectos": {"social": 20, "intelecto": -15, "salud": -5},
-      "siguiente_id": "uni_02_reprobado_maria"
-    },
-    "opcion_der": {
-      "texto": "estudiar",
-      "efectos": {"social": -10, "intelecto": 20, "salud": -5},
-      "siguiente_id": "uni_02_aprobado_solo"
-    }
-  },
-
-  "trabajo_01_novato": {
-    "texto": "el jefe te pide quedarte horas extra por un poco de money (estafadisimo en py)",
-    "opcion_izq": {
-      "texto": "aceptar",
-      "efectos": {"laboral": 15, "salud": -20, "social": -10},
-      "siguiente_id": "trabajo_02_explotado"
-    },
-    "opcion_der": {
-      "texto": "rechazar",
-      "efectos": {"laboral": -10, "salud": 10, "social": 5},
-      "siguiente_id": "trabajo_02_despedido"
-    }
-  }
 }

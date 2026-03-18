@@ -1,21 +1,21 @@
-/* controlador central del frontend (reactivo al backend) */
+/* controlador principal del juego */
 const ControladorVisual = {
-    busy: false,
-    cartaActual: null,
+    busy: false, // evita que el jugador haga dos acciones al mismo tiempo
+    cartaActual: null, // guarda la carta que esta en pantalla
     
-    /* diccionario narrativo para condiciones de colapso */
+    // textos e iconos para cuando te quedas en cero
     mensajesDerrota: {
-        salud:     { icon: '🏥', title: 'Internado en el IPS',  msg: 'Tu cuerpo aguantó todo lo que le pediste. Un día simplemente no pudo más.' },
-        intelecto: { icon: '📋', title: 'Perdiste la beca',      msg: 'Las materias se acumularon hasta que ya no hubo vuelta atrás.' },
-        laboral:   { icon: '📦', title: 'Te despidieron',        msg: 'Te llamaron a una reunión corta. Te dieron un sobre.' },
-        social:    { icon: '🪟', title: 'Depresión',             msg: 'Hace semanas que no contestás mensajes. La gente dejó de enviarlos.' },
-        dinero:    { icon: '🪙', title: 'Te quedaste sin nada',  msg: 'La cuenta llegó a cero y los compromisos siguieron llegando.' }
+        salud:     { icon: '🏥', title: 'internado en el ips',  msg: 'tu cuerpo aguantó todo lo que le pediste. un día simplemente no pudo más.' },
+        intelecto: { icon: '📋', title: 'perdiste la beca',      msg: 'las materias se acumularon hasta que ya no hubo vuelta atrás.' },
+        laboral:   { icon: '📦', title: 'te despidieron',        msg: 'te llamaron a una reunión corta. te dieron un sobre.' },
+        social:    { icon: '🪟', title: 'depresión',             msg: 'hace semanas que no contestás mensajes. la gente dejó de enviarlos.' },
+        dinero:    { icon: '🪙', title: 'te quedaste sin nada',  msg: 'la cuenta llegó a cero y los compromisos siguieron llegando.' }
     },
 
-    /* formateador de moneda local */
+    // le da formato de moneda al texto del dinero
     fmt: function(n) { return '₲ ' + Math.abs(n).toLocaleString('es-PY'); },
 
-    /* solicita el estado inicial a python e inyecta la primera interfaz */
+    // pide los datos iniciales al servidor para empezar a jugar
     inicializar: function() {
         fetch('/api/estado')
             .then(res => res.json())
@@ -29,16 +29,42 @@ const ControladorVisual = {
             });
     },
 
-    /* actualiza el dom con los textos de la carta actual */
+    // prepara la carta nueva en la pantalla
     renderizarCarta: function(carta) {
-        document.getElementById('npc-name').textContent = 'Carta';
-        document.getElementById('situation-text').textContent = carta.texto;
-        document.getElementById('btn-izq').textContent = '← ' + carta.opcion_izq.texto;
-        document.getElementById('btn-der').textContent = carta.opcion_der.texto + ' →';
+        document.getElementById('npc-name').textContent = 'carta';
+        
+        // actualiza la imagen real de la carta
+        const imgElement = document.getElementById('ui-card-img');
+        
+        // revisa si la carta tiene una imagen valida
+        if (carta.img && carta.img !== "") {
+            imgElement.src = carta.img; // carga la imagen de la base de datos
+        } else {
+            // imagen por defecto por seguridad si no hay ruta definida
+            imgElement.src = "/static/img/predeterminado.png"; 
+        }
+        
+        this.actualizarTextoCarta('base');
         document.getElementById('log').textContent = '';
     },
 
-    /* actualiza anchos de barra y valores numericos del hud */
+    // cambia el texto que lees dependiendo de si mueves la carta a la izquierda o derecha
+    actualizarTextoCarta: function(modo) {
+        if (!this.cartaActual) return;
+        const st = document.getElementById('situation-text');
+        if (modo === 'izq') {
+            st.textContent = '« ' + this.cartaActual.opcion_izq.texto;
+            st.style.color = '#8a8fa8';
+        } else if (modo === 'der') {
+            st.textContent = this.cartaActual.opcion_der.texto + ' »';
+            st.style.color = '#8a8fa8';
+        } else {
+            st.textContent = this.cartaActual.texto;
+            st.style.color = '#d0d2dc';
+        }
+    },
+
+    // actualiza las barras de vida, estudio, trabajo, etc.
     renderizarStats: function(stats) {
         document.getElementById('ui-salud').style.width = stats.salud + '%';
         document.getElementById('ui-intelecto').style.width = stats.intelecto + '%';
@@ -52,7 +78,7 @@ const ControladorVisual = {
         document.getElementById('ui-dinero').textContent = this.fmt(stats.dinero);
     },
 
-    /* inyecta y anima los numeros de impacto (verdes/rojos) post-decision */
+    // hace aparecer los numeritos flotantes de daño o beneficio
     mostrarDeltas: function(efectos) {
         if (!efectos) return;
         ['salud', 'intelecto', 'laboral', 'social'].forEach(k => {
@@ -74,7 +100,7 @@ const ControladorVisual = {
         }
     },
 
-    /* resetea los numeros de impacto */
+    // esconde los numeritos flotantes
     ocultarDeltas: function() {
         ['salud', 'intelecto', 'laboral', 'social', 'dinero'].forEach(k => {
             const b = document.getElementById('d-' + k);
@@ -82,12 +108,11 @@ const ControladorVisual = {
         });
     },
 
-    /* despliega la capa oscura de fin de juego con resolucion narrativa */
+    // activa la pantalla de muerte
     ejecutarGameOver: function(statFatal, mensajeServidor) {
         this.ocultarDeltas();
         
-        // asignacion dinamica de textos dependiendo si es muerte o victoria
-        const title = statFatal ? this.mensajesDerrota[statFatal].title : 'Fin del Trayecto';
+        const title = statFatal ? this.mensajesDerrota[statFatal].title : 'fin del trayecto';
         const msg = statFatal ? this.mensajesDerrota[statFatal].msg : mensajeServidor;
         const icon = statFatal ? this.mensajesDerrota[statFatal].icon : '⏳';
 
@@ -96,20 +121,20 @@ const ControladorVisual = {
         document.getElementById('go-msg').textContent = msg;
         
         if (statFatal) {
-            const labels = { salud: 'Salud · 0%', intelecto: 'Intelecto · 0%', laboral: 'Laboral · 0%', social: 'Social · 0%', dinero: 'Dinero · ₲ 0' };
+            const labels = { salud: 'salud · 0%', intelecto: 'intelecto · 0%', laboral: 'laboral · 0%', social: 'social · 0%', dinero: 'dinero · ₲ 0' };
             document.getElementById('go-stat-label').textContent = labels[statFatal];
             document.getElementById('row-' + statFatal).classList.add('bar-critical');
         } else {
-            document.getElementById('go-stat-label').textContent = "Equilibrio Temporal";
+            document.getElementById('go-stat-label').textContent = "equilibrio temporal";
         }
         
         setTimeout(() => document.getElementById('gameover-overlay').classList.add('active'), 500);
     },
 
-    /* procesa el gesto del usuario, anima la carta y delega el calculo a python */
+    // envia la decision al servidor y procesa lo que pasa despues
     ejecutarSwipe: function(dir) {
         if (this.busy || !this.cartaActual) return;
-        this.busy = true;
+        this.busy = true; // bloquea controles
         
         const ci = document.getElementById('card-inner');
         const opcion = dir === 'izq' ? this.cartaActual.opcion_izq : this.cartaActual.opcion_der;
@@ -117,7 +142,7 @@ const ControladorVisual = {
         document.getElementById('log').textContent = '› ' + opcion.texto;
         ci.classList.add(dir === 'izq' ? 'fly-l' : 'fly-r');
 
-        // delegacion de matematicas a servidor (motor de grafos)
+        // envia los datos
         fetch('/api/decision', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -125,11 +150,12 @@ const ControladorVisual = {
         })
         .then(res => res.json())
         .then(resultadoBackend => {
+            console.log("paquete del servidor:", resultadoBackend);
             setTimeout(() => {
                 this.renderizarStats(resultadoBackend.stats);
                 this.mostrarDeltas(resultadoBackend.efectos); 
 
-                // animacion de pulso para barras alteradas
+                // animacion de parpadeo en las barras alteradas
                 ['salud', 'intelecto', 'laboral', 'social'].forEach(k => {
                     if (!resultadoBackend.efectos || !resultadoBackend.efectos[k]) return;
                     const r = document.getElementById('row-' + k);
@@ -139,13 +165,36 @@ const ControladorVisual = {
                     setTimeout(() => r.classList.remove('bar-changing'), 600);
                 });
 
-                // intercepcion de colapso dictado por servidor
+                // revisa si moriste
                 if (resultadoBackend.fin) {
                     setTimeout(() => { this.ejecutarGameOver(resultadoBackend.stat_fatal, resultadoBackend.mensaje); this.busy = false; }, 700);
-                    return;
+                    return; 
                 }
 
-                // carga e inyeccion del siguiente nodo del grafo
+                // si no mueres, evalua el trauma
+                let demoraNarrativa = 600;
+
+                if (resultadoBackend.alerta) {
+                    demoraNarrativa = 4500; // pausa el juego unos segundos
+                    const gameDiv = document.getElementById('game');
+                    const panicOverlay = document.getElementById('panic-overlay');
+                    const panicMsg = document.getElementById('panic-msg');
+                    
+                    // inyecta el texto del pensamiento intrusivo
+                    panicMsg.textContent = resultadoBackend.alerta.mensaje;
+                    
+                    // activa la pantalla clonada
+                    panicOverlay.classList.add('active');
+                    gameDiv.classList.add('stress-tremble', 'stress-vignette');
+
+                    // la oculta despues de 4 segundos para seguir jugando
+                    setTimeout(() => {
+                        panicOverlay.classList.remove('active');
+                        gameDiv.classList.remove('stress-tremble', 'stress-vignette');
+                    }, 4000);
+                }
+
+                // carga la proxima carta
                 setTimeout(() => {
                     this.ocultarDeltas();
                     this.cartaActual = resultadoBackend.carta;
@@ -154,34 +203,50 @@ const ControladorVisual = {
                     void ci.offsetWidth;
                     ci.classList.add('entering');
                     setTimeout(() => { ci.classList.remove('entering'); this.busy = false; }, 350);
-                }, 600);
+                }, demoraNarrativa);
 
             }, 880);
         });
     },
 
-    /* asignacion de escuchadores de eventos para interaccion manual o tactil */
+    // configura el mouse, la pantalla tactil y los botones
     asignarEventos: function() {
         let drag = false, sx = 0, cx = 0;
         const ci = document.getElementById('card-inner');
 
+        // detecta cuando haces clic o tocas la carta
         const ds = (x) => { if (!this.busy) { drag = true; sx = x; } };
+        
+        // detecta cuando arrastras la carta
         const dm = (x) => {
             if (!drag) return;
             cx = x - sx;
             ci.classList.remove('tilt-l', 'tilt-r');
-            if (cx < -30) ci.classList.add('tilt-l');
-            else if (cx > 30) ci.classList.add('tilt-r');
+            if (cx < -30) {
+                ci.classList.add('tilt-l');
+                this.actualizarTextoCarta('izq');
+            } else if (cx > 30) {
+                ci.classList.add('tilt-r');
+                this.actualizarTextoCarta('der');
+            } else {
+                this.actualizarTextoCarta('base');
+            }
         };
+        
+        // detecta cuando sueltas la carta
         const de = () => {
             if (!drag) return;
             drag = false;
             if (cx < -60) this.ejecutarSwipe('izq');
             else if (cx > 60) this.ejecutarSwipe('der');
-            else ci.classList.remove('tilt-l', 'tilt-r');
+            else {
+                ci.classList.remove('tilt-l', 'tilt-r');
+                this.actualizarTextoCarta('base');
+            }
             cx = 0;
         };
 
+        // enlaza los eventos de arrastre a la pantalla
         ci.addEventListener('mousedown', e => ds(e.clientX));
         window.addEventListener('mousemove', e => dm(e.clientX));
         window.addEventListener('mouseup', de);
@@ -189,31 +254,41 @@ const ControladorVisual = {
         window.addEventListener('touchmove', e => dm(e.touches[0].clientX), { passive: true });
         window.addEventListener('touchend', de);
 
+        // enlaza los clicks en los botones de accion
         document.getElementById('btn-izq').addEventListener('click', () => this.ejecutarSwipe('izq'));
         document.getElementById('btn-der').addEventListener('click', () => this.ejecutarSwipe('der'));
         
-        // reinicio forzando recarga de la aplicacion al cliente
+        // boton para reiniciar la pagina al perder
         document.getElementById('go-restart').addEventListener('click', () => {
             location.reload(); 
         });
+
+        // efectos de pasar el mouse por los botones de accion
+        const btnIzq = document.getElementById('btn-izq');
+        const btnDer = document.getElementById('btn-der');
+        
+        btnIzq.addEventListener('mouseenter', () => { if(!this.busy) this.actualizarTextoCarta('izq'); });
+        btnIzq.addEventListener('mouseleave', () => { if(!this.busy) this.actualizarTextoCarta('base'); });
+        
+        btnDer.addEventListener('mouseenter', () => { if(!this.busy) this.actualizarTextoCarta('der'); });
+        btnDer.addEventListener('mouseleave', () => { if(!this.busy) this.actualizarTextoCarta('base'); });
     }
 };
 
-/* arranque autonomo del menu al cargar documento */
+// se ejecuta cuando la pagina termina de cargar
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. solicitar diccionario de clases a servidor
+    // pide las clases disponibles al servidor
     fetch('/api/clases')
         .then(res => res.json())
         .then(clases => {
             const container = document.getElementById('clases-container');
             container.innerHTML = ''; 
             
-            // 2. renderizado dinamico (data-driven) de botones de seleccion
+            // crea un boton por cada clase en el menu principal
             for (const [nombre, datos] of Object.entries(clases)) {
                 const btn = document.createElement('button');
                 btn.className = 'btn-clase';
                 btn.onclick = () => elegirClase(nombre);
-                
                 btn.innerHTML = `
                     <span style="font-weight: bold; font-size: 22px; color: #c8cad4;">${nombre}</span>
                     <span class="clase-desc">${datos.descripcion}</span>
@@ -223,7 +298,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 });
 
-/* puente comunicacional de inicializacion con servidor */
+// envia la clase elegida al servidor y quita el menu
 function elegirClase(nombreClase) {
     fetch('/api/iniciar', {
         method: 'POST',
@@ -233,7 +308,6 @@ function elegirClase(nombreClase) {
     .then(res => res.json())
     .then(data => {
         if(data.status === 'ok') {
-            // eliminacion de capa de seleccion y activacion de hud
             document.getElementById('start-screen').style.display = 'none';
             ControladorVisual.inicializar();
         }
