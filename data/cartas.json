@@ -1,43 +1,314 @@
 {
-  "inicio": {
-    "texto": "texto que describe la situacion o las opciones",
-    "opcion_izq": {
-      "texto": "matricularse en la uni",
-      "efectos": {"intelecto": 15, "dinero": -200000, "laboral": 1},
-      "siguiente_id": "uni_01_ingreso"
+    "inicio": {
+        "texto": "Acabas de terminar el colegio, con solo 18 años ya la vida te exige tomar una decisión que forjará tu futuro... ¿Qué es lo que elegís priorizar: Tratar de mantener la beca de Itaipú o ascender en el mundo laboral? ¿Qué decisiones vas a tomar? ¿Qué estás dispuesto a sacrificar? ",
+        "img": "",
+        "opcion_izq": {
+            "texto": "Priorizo mi formación académica",
+            "siguiente_id": "1",
+            "efectos": {
+                "salud": 0,
+                "dinero": 0,
+                "intelecto": 0,
+                "laboral": 0,
+                "social": 0
+            }
+        },
+        "opcion_der": {
+            "texto": "Priorizo mi carrera laboral",
+            "siguiente_id": "1",
+            "efectos": {
+                "salud": 0,
+                "dinero": 0,
+                "intelecto": 0,
+                "laboral": 0,
+                "social": 0
+            }
+        }
     },
-    "opcion_der": {
-      "texto": "trabajar",
-      "efectos": {"intelecto": 0, "dinero": 250000, "laboral": 15},
-      "siguiente_id": "trabajo_01_novato"
-    }
-  },
-
-  "uni_01_ingreso": {
-    "texto": "en el camino te encontras con Maria (tiene sorpresita y voz masculina)",
-    "opcion_izq": {
-      "texto": "salir con Maria",
-      "efectos": {"social": 20, "intelecto": -15, "salud": -5},
-      "siguiente_id": "uni_02_reprobado_maria"
+    "1": {
+        "texto": "Si bien es cierto que conseguiste la beca... La elección de tu carrera universitaria te sigue generando inquietud, las opiniones y las expectativas de los demás te pesan... ¿Hiciste lo correcto?",
+        "img": "",
+        "opcion_izq": {
+            "texto": "Sí, es lo que me apasiona. Encontraré la forma de salir adelante.",
+            "siguiente_id": "1.1",
+            "efectos": {
+                "salud": 10,
+                "dinero": 0,
+                "intelecto": 0,
+                "laboral": 0,
+                "social": 0
+            }
+        },
+        "opcion_der": {
+            "texto": "Sí, es lo que me conviene. Encontraré la forma de que me guste.",
+            "siguiente_id": "1.2",
+            "efectos": {
+                "salud": 0,
+                "dinero": 0,
+                "intelecto": 10,
+                "laboral": 0,
+                "social": 0
+            }
+        }
     },
-    "opcion_der": {
-      "texto": "estudiar",
-      "efectos": {"social": -10, "intelecto": 20, "salud": -5},
-      "siguiente_id": "uni_02_aprobado_solo"
-    }
-  },
-
-  "trabajo_01_novato": {
-    "texto": "el jefe te pide quedarte horas extra por un poco de money (estafadisimo en py)",
-    "opcion_izq": {
-      "texto": "aceptar",
-      "efectos": {"laboral": 15, "salud": -20, "social": -10},
-      "siguiente_id": "trabajo_02_explotado"
+    "1.1": {
+        "texto": "La carrera que elegiste no tiene tanta salida laboral, sumado a eso tu red de contactos es inexistente. Las opciones de primer empleo son las siguientes:",
+        "img": "",
+        "opcion_izq": {
+            "texto": "Cajero en Biggie Express",
+            "siguiente_id": "1.1.1",
+            "efectos": {
+                "salud": -20,
+                "dinero": 1000000,
+                "intelecto": 0,
+                "laboral": 10,
+                "social": -10
+            }
+        },
+        "opcion_der": {
+            "texto": "Operador en Call Center",
+            "siguiente_id": "1.1.2",
+            "efectos": {
+                "salud": -30,
+                "dinero": 800000,
+                "intelecto": 10,
+                "laboral": 10,
+                "social": -20
+            }
+        }
     },
-    "opcion_der": {
-      "texto": "rechazar",
-      "efectos": {"laboral": -10, "salud": 10, "social": 5},
-      "siguiente_id": "trabajo_02_despedido"
+    "1.2": {
+        "texto": "Tu carrera tiene salida laboral pero hay mucha competencia, así que las empresas hacen de todo para reducir costos.",
+        "img": "",
+        "opcion_izq": {
+            "texto": "Trabajo legal pero sin remuneración de las horas extras",
+            "siguiente_id": "1.2.1",
+            "efectos": {
+                "salud": -30,
+                "dinero": 1500000,
+                "intelecto": 10,
+                "laboral": 20,
+                "social": -30
+            }
+        },
+        "opcion_der": {
+            "texto": "Trabajo en negro",
+            "siguiente_id": "1.2.2",
+            "efectos": {
+                "salud": -15,
+                "dinero": 1000000,
+                "intelecto": 0,
+                "laboral": 10,
+                "social": 10
+            }
+        }
+    },
+    "1.1.1": {
+        "texto": "Te pagan el salario mínimo en Biggie pero rebuscan de todas las maneras posibles para descontarte. Los horarios rotativos te están afectando bastante. Notas que te has vuelto un poco más irritable con la gente. ¿Tratas de aguantar un poco más o preferís salirte y buscar otro laburo?",
+        "img": "",
+        "opcion_izq": {
+            "texto": "Me quedo",
+            "siguiente_id": "1.1.1_1.1.2",
+            "efectos": {
+                "salud": -10,
+                "dinero": 0,
+                "intelecto": 0,
+                "laboral": 5,
+                "social": 0
+            }
+        },
+        "opcion_der": {
+            "texto": "Me voy",
+            "siguiente_id": "1.1.1_1.1.2",
+            "efectos": {
+                "salud": 10,
+                "dinero": -500000,
+                "intelecto": 0,
+                "laboral": -5,
+                "social": 10
+            }
+        }
+    },
+    "1.1.2": {
+        "texto": "Si bien en el Call Center tus horarios \"en teoría\" son fijos, te toca cubrir cuando la gente renuncia (Lo cual pasa seguido). Tenés estrés crónico y la fatiga ya se volvió una constante. Lo único bueno es que tenés 2 descansos de 45 minutos cada uno en la jornada de 10 horas, donde aprovechas para estudiar. ",
+        "img": "",
+        "opcion_izq": {
+            "texto": "Ya no aguanto...",
+            "siguiente_id": "1.1.1_1.1.2",
+            "efectos": {
+                "salud": 20,
+                "dinero": -400000,
+                "intelecto": 0,
+                "laboral": 0,
+                "social": 10
+            }
+        },
+        "opcion_der": {
+            "texto": "Yo puedo un poco más...",
+            "siguiente_id": "1.1.2_1.2.1",
+            "efectos": {
+                "salud": -10,
+                "dinero": 200000,
+                "intelecto": -10,
+                "laboral": 10,
+                "social": -5
+            }
+        }
+    },
+    "1.2.1": {
+        "texto": "Todo lo que estudias en la uni lo aplicas en el trabajo. Estás en una institución sólida con más de 50 años de trayectoria. El salario es un poco más que el mínimo, tenés seguro privado e IPS, pero terminás trabajando en promedio +12 horas al día. Te planteas si vale la pena todo esto.",
+        "img": "",
+        "opcion_izq": {
+            "texto": "Hay que sudar la camiseta!",
+            "siguiente_id": "1.1.2_1.2.1",
+            "efectos": {
+                "salud": -10,
+                "dinero": 250000,
+                "intelecto": 10,
+                "laboral": 5,
+                "social": -10
+            }
+        },
+        "opcion_der": {
+            "texto": "Páguenme AHORA!",
+            "siguiente_id": "1.2.1_1.2.2",
+            "efectos": {
+                "salud": 20,
+                "dinero": -750000,
+                "intelecto": 0,
+                "laboral": -10,
+                "social": 40
+            }
+        }
+    },
+    "1.2.2": {
+        "texto": "Ya hace tiempo que trabajas en esta empresa, no hay registros de nada y la gente se maneja mediante favores y meriendas. Hace meses que te prometen el contrato que nunca llega. Aguantar el nepotismo es tu pan de cada día. Aprendiste a lidiar con la gente. Te es cómodo estar acá pero sabes que así no vas a escalar... ¿Qué vas a hacer?",
+        "img": "",
+        "opcion_izq": {
+            "texto": "Preparo mi CV para la primera oportunidad que aparezca",
+            "siguiente_id": "1.2.1_1.2.2",
+            "efectos": {
+                "salud": 5,
+                "dinero": -400000,
+                "intelecto": 0,
+                "laboral": 0,
+                "social": 0
+            }
+        },
+        "opcion_der": {
+            "texto": "Y la verdad que estoy cómodo acá...",
+            "siguiente_id": "1.2.1_1.2.2",
+            "efectos": {
+                "salud": 0,
+                "dinero": 250000,
+                "intelecto": 0,
+                "laboral": 0,
+                "social": 0
+            }
+        }
+    },
+    "1.1.1_1.1.2": {
+        "texto": "El estrés y el cansancio te pasaron factura y terminaste enfermo, ahora estás en tu casa reposando y estás pensando qué podés hacer en cuanto a tu futuro...",
+        "img": "",
+        "opcion_izq": {
+            "texto": "Hacer lo que puedo, un día a la vez",
+            "siguiente_id": "2",
+            "efectos": {
+                "salud": 0,
+                "dinero": 0,
+                "intelecto": 0,
+                "laboral": 0,
+                "social": 0
+            }
+        },
+        "opcion_der": {
+            "texto": "Dejar todo por un tiempo y luego ver qué hacer",
+            "siguiente_id": "2",
+            "efectos": {
+                "salud": 10,
+                "dinero": -250000,
+                "intelecto": 0,
+                "laboral": 0,
+                "social": 0
+            }
+        }
+    },
+    "1.1.2_1.2.1": {
+        "texto": "Una ex-compañera del trabajo te recomienda en la empresa en la que está. Decidís ir sin miedo, no podría ser peor que tu trabajo actual.",
+        "img": "",
+        "opcion_izq": {
+            "texto": "Que sea lo que Dios quiera",
+            "siguiente_id": "2",
+            "efectos": {
+                "salud": 0,
+                "dinero": 0,
+                "intelecto": 0,
+                "laboral": 0,
+                "social": 0
+            }
+        },
+        "opcion_der": {
+            "texto": "Al mal tiempo, buena cara",
+            "siguiente_id": "2",
+            "efectos": {
+                "salud": 0,
+                "dinero": 0,
+                "intelecto": 0,
+                "laboral": 0,
+                "social": 0
+            }
+        }
+    },
+    "1.2.1_1.2.2": {
+        "texto": "Esa mentalidad y la forma de plantear la situación no te ayudó... Terminaron despidiándote. ¿Qué vas a hacer a partir de ahora?",
+        "img": "",
+        "opcion_izq": {
+            "texto": "Tomarme un descanso y pensar bien las cosas",
+            "siguiente_id": "2",
+            "efectos": {
+                "salud": 10,
+                "dinero": -300000,
+                "intelecto": 0,
+                "laboral": -20,
+                "social": 0
+            }
+        },
+        "opcion_der": {
+            "texto": "Aguantar con lo que pueda",
+            "siguiente_id": "2",
+            "efectos": {
+                "salud": 10,
+                "dinero": -300000,
+                "intelecto": 0,
+                "laboral": 0,
+                "social": 0
+            }
+        }
+    },
+    "2": {
+        "texto": "La vida te sonríe nuevamente... Las cosas se tornaron para bien. Conseguiste ese nuevo trabajo que tanto querías, ya trabajas de forma legal y no te explotan, podés incluso estudiar más.",
+        "img": "",
+        "opcion_izq": {
+            "texto": "Trabajar más y ascender",
+            "siguiente_id": "3",
+            "efectos": {
+                "salud": -10,
+                "dinero": 250000,
+                "intelecto": 10,
+                "laboral": 10,
+                "social": -20
+            }
+        },
+        "opcion_der": {
+            "texto": "Usar el tiempo para estudiar",
+            "siguiente_id": "3",
+            "efectos": {
+                "salud": 10,
+                "dinero": 0,
+                "intelecto": 20,
+                "laboral": 10,
+                "social": 10
+            }
+        }
     }
-  }
 }
