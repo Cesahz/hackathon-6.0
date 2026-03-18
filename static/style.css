@@ -445,3 +445,116 @@ body {
   position: relative;
   z-index: 2;
 }
+/* capa de oscurecimiento absoluto para derrota */
+#gameover-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  pointer-events: none;
+  transition: background 0.6s;
+}
+
+/* activacion de opacidad y eventos al perder */
+#gameover-overlay.active {
+  background: rgba(0, 0, 0, 0.88);
+  pointer-events: all;
+}
+
+/* caja central del mensaje de derrota */
+#gameover-box {
+  width: 420px;
+  background: #0f1118;
+  border: 1px solid #22263a;
+  border-radius: 12px;
+  padding: 40px 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  opacity: 0;
+  transform: translateY(20px) scale(0.96);
+  transition: opacity 0.4s 0.3s, transform 0.4s 0.3s;
+}
+
+/* animacion de entrada para la caja de derrota */
+#gameover-overlay.active #gameover-box {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* icono principal del game over */
+#go-icon {
+  font-size: 56px;
+  line-height: 1;
+}
+
+/* titulo dramatico de resolucion */
+#go-title {
+  font-family: 'IM Fell English', Georgia, serif;
+  font-size: 32px;
+  font-style: italic;
+  color: #e8e6f0;
+  text-align: center;
+}
+
+/* linea decorativa separadora del game over */
+#go-rule {
+  width: 80%;
+  height: 1px;
+  background: #22263a;
+}
+
+/* mensaje narrativo de la razon de muerte */
+#go-msg {
+  font-family: 'IM Fell English', Georgia, serif;
+  font-size: 16px;
+  font-style: italic;
+  color: #8a8fa8;
+  line-height: 1.7;
+  text-align: center;
+}
+
+/* etiqueta mostrando la estadistica que causó la falla */
+#go-stat-label {
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid #22263a;
+  color: #3a3f52;
+}
+
+/* boton de reseteo del bucle temporal */
+#go-restart {
+  margin-top: 4px;
+  width: 100%;
+  height: 50px;
+  background: transparent;
+  border: 1px solid #22263a;
+  border-radius: 8px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #6b7080;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+
+/* animacion del boton de reseteo */
+#go-restart:hover {
+  border-color: #6b7080;
+  color: #c8cad4;
+  background: #161924;
+}
+
+/* ajuste condicional de pantalla para dispositivos moviles */
+@media (max-width: 360px) {
+  #stats-block, #card-area, #log { width: 100%; }
+  #card-area { overflow: visible; }
+}
