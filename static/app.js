@@ -112,7 +112,7 @@ const ControladorVisual = {
     ejecutarGameOver: function(statFatal, mensajeServidor) {
         this.ocultarDeltas();
         
-        const title = statFatal ? this.mensajesDerrota[statFatal].title : 'fin del trayecto';
+        const title = statFatal ? this.mensajesDerrota[statFatal].title : 'Fin de la DEMO.';
         const msg = statFatal ? this.mensajesDerrota[statFatal].msg : mensajeServidor;
         const icon = statFatal ? this.mensajesDerrota[statFatal].icon : '⏳';
 
@@ -125,7 +125,7 @@ const ControladorVisual = {
             document.getElementById('go-stat-label').textContent = labels[statFatal];
             document.getElementById('row-' + statFatal).classList.add('bar-critical');
         } else {
-            document.getElementById('go-stat-label').textContent = "equilibrio temporal";
+            document.getElementById('go-stat-label').textContent = "Final de la demo";
         }
         
         setTimeout(() => document.getElementById('gameover-overlay').classList.add('active'), 500);
