@@ -298,3 +298,150 @@ body {
   border-left: 1px solid #22263a;
   border-right: 1px solid #22263a;
 }
+/* area contenedora del nodo interactivo (carta) */
+#card-area {
+  position: relative;
+  z-index: 2;
+  width: 500px;
+  overflow: hidden;
+}
+
+/* estructura movil de la carta */
+#card-inner {
+  width: 100%;
+  cursor: grab;
+  transform-origin: bottom center;
+  transition: transform 0.38s cubic-bezier(.4, 0, .2, 1), opacity 0.35s;
+}
+
+/* cursor de arrastre activo */
+#card-inner:active { cursor: grabbing; }
+
+/* animacion de inclinacion lateral durante el arrastre */
+#card-inner.tilt-l { transform: rotate(-4deg) translateX(-14px); }
+#card-inner.tilt-r { transform: rotate(4deg)  translateX(14px); }
+
+/* fisicas de salida lateral al decidir */
+#card-inner.fly-l { transform: rotate(-26deg) translateX(-600px); opacity: 0; }
+#card-inner.fly-r { transform: rotate(26deg) translateX(600px); opacity: 0; }
+
+/* fisica de entrada inferior para nueva carta */
+#card-inner.entering {
+  animation: slideUp 0.32s cubic-bezier(.4, 0, .2, 1) forwards;
+}
+
+/* motor de animacion de entrada vertical */
+@keyframes slideUp {
+  from { transform: translateY(16px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* cabecera con el nombre de la carta */
+#name-block {
+  background: #12151f;
+  border-left: 1px solid #22263a;
+  border-right: 1px solid #22263a;
+  padding: 8px 14px 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* etiqueta fija npc */
+#npc-tag {
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  color: #3a3f52;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+/* texto dinamico del titulo de la carta */
+#npc-name {
+  font-family: 'IM Fell English', Georgia, serif;
+  font-size: 20px;
+  font-style: italic;
+  color: #c8cad4;
+}
+
+/* contenedor de la ilustracion visual */
+#card-image {
+  width: 100%;
+  height: 260px;
+  background: #080b12;
+  border-left: 1px solid #22263a;
+  border-right: 1px solid #22263a;
+  overflow: hidden;
+}
+
+/* ajuste del svg ilustrativo */
+#card-image svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* contenedor del texto principal del evento */
+#situation-block {
+  background: #12151f;
+  border-left: 1px solid #22263a;
+  border-right: 1px solid #22263a;
+  padding: 24px 28px;
+  min-height: 120px;
+}
+
+/* formato de la historia o situacion */
+#situation-text {
+  font-family: 'IM Fell English', Georgia, serif;
+  font-size: 18px;
+  font-style: italic;
+  color: #d0d2dc;
+  line-height: 1.6;
+}
+
+/* contenedor de botones de seleccion dual */
+#btn-row {
+  display: flex;
+  border: 1px solid #22263a;
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  overflow: hidden;
+}
+
+/* botones de decision izquierda y derecha */
+#btn-izq, #btn-der {
+  flex: 1;
+  height: 60px;
+  border: none;
+  background: #0e0d12;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  text-transform: uppercase;
+  color: #3a3f52;
+  padding: 0 8px;
+  transition: background 0.2s, color 0.2s;
+}
+
+/* divisor estetico entre botones */
+#btn-izq { border-right: 0.5px solid #22263a; }
+
+/* iluminacion de botones al pasar el cursor */
+#btn-izq:hover, #btn-der:hover {
+  background: #161924;
+  color: #6b7080;
+}
+
+/* registro de la accion tomada debajo de la carta */
+#log {
+  width: 500px;
+  margin-top: 16px;
+  font-size: 14px;
+  color: #3a3f52;
+  letter-spacing: 0.06em;
+  line-height: 1.6;
+  min-height: 22px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
